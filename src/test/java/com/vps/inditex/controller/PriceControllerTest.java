@@ -3,6 +3,7 @@ package com.vps.inditex.controller;
 import com.vps.inditex.application.dto.PriceDTO;
 import com.vps.inditex.application.service.PriceService;
 import com.vps.inditex.infrastructure.controller.PriceController;
+import com.vps.inditex.infrastructure.exception.PriceNotFoundException;
 import com.vps.inditex.infrastructure.mapper.PriceControllerMapper;
 import com.vps.inditex.infrastructure.response.PriceResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -25,22 +25,22 @@ import static org.mockito.Mockito.*;
 class PriceControllerTest {
 
     @Mock
-    private PriceService priceService;
+    private PriceService service;
 
     @Mock
-    private PriceControllerMapper priceControllerMapper;
+    private PriceControllerMapper mapper;
 
     @InjectMocks
-    private PriceController priceController;
+    private PriceController controller;
 
-    private PriceResponse mockResponse;
+    private PriceResponse priceResponse;
 
     @BeforeEach
     void setUp() {
-        mockResponse = new PriceResponse();
-        mockResponse.setProductId(1L);
-        mockResponse.setBrandId(1);
-        mockResponse.setPrice(100.0);
+        priceResponse = new PriceResponse();
+        priceResponse.setProductId(1L);
+        priceResponse.setBrandId(1);
+        priceResponse.setPrice(100.0);
     }
 
     @Test
@@ -63,33 +63,20 @@ class PriceControllerTest {
         List<PriceDTO> priceDTOS = new ArrayList<>();
         priceDTOS.add(price);
 
-        when(priceService.getPrices(date, productId, brandId)).thenReturn(priceDTOS);
-        when(priceControllerMapper.toResponse(price)).thenReturn(mockResponse);
+        when(service.getPrices(date, productId, brandId)).thenReturn(priceDTOS);
+        when(mapper.toResponse(price)).thenReturn(priceResponse);
 
-        // Act
-        ResponseEntity<List<PriceResponse>> response = priceController.getPriceByFilter(date, productId, brandId);
+        ResponseEntity<List<PriceResponse>> response = controller.getPriceByFilter(date, productId, brandId);
 
-        // Assert
         assertEquals(200, response.getStatusCode().value());
         assertFalse(response.getBody().isEmpty());
-        verify(priceService, times(1)).getPrices(date, productId, brandId);
+        verify(service, times(1)).getPrices(date, productId, brandId);
     }
 
     @Test
-    void getPriceByFilter_ReturnsBadRequest_WhenNoPricesExist() {
-        // Arrange
-        String date = "2024-06-14T10:00:00";
-        Integer productId = 1;
-        Integer brandId = 1;
+    void getPriceByFilter_ShouldThrowException_WhenNoPricesFound() {
+        when(service.getPrices(any(), any(), any())).thenReturn(Collections.emptyList());
 
-        when(priceService.getPrices(date, productId, brandId)).thenReturn(Collections.emptyList());
-
-        // Act
-        ResponseEntity<List<PriceResponse>> response = priceController.getPriceByFilter(date, productId, brandId);
-
-        // Assert
-        assertEquals(400, response.getStatusCode().value());
-        assertTrue(Objects.requireNonNull(response.getBody()).isEmpty());
-        verify(priceService, times(1)).getPrices(date, productId, brandId);
+        assertThrows(PriceNotFoundException.class, () -> controller.getPriceByFilter("2024-01-01-00:00:00", 33333, 5));
     }
 }
