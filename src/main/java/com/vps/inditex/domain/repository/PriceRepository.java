@@ -17,7 +17,5 @@ public interface PriceRepository extends JpaRepository<Price, Integer> {
     List<Price> findPriceByFields(@Param("requestDate") Timestamp requestDate,
                                   @Param("productId") Integer productId,
                                   @Param("brandId") Brand brandId);
-
-    List<Price> findByStartDateLessThanEqualAndEndDateGreaterThanEqualAndProductIdAndBrand(Timestamp startDate, Timestamp endDate,
-                                                                                             Integer productId, Brand brand);
+    
 }
