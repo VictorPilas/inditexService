@@ -1,0 +1,105 @@
+{
+  "info": {
+    "name": "Inditex Prices API E2E",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Prices - Success Case",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/prices?date=2020-06-16-21.00.00&productId=35455&brandId=1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "prices"
+          ],
+          "query": [
+            {
+              "key": "date",
+              "value": "2020-06-16-21.00.00"
+            },
+            {
+              "key": "productId",
+              "value": "35455"
+            },
+            {
+              "key": "brandId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Response has price list\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.length).to.be.above(0);",
+              "    pm.expect(jsonData[0]).to.have.property('price');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Prices - No Results",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/prices?date=1900-01-01-00.00.00&productId=99999&brandId=99",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "prices"
+          ],
+          "query": [
+            {
+              "key": "date",
+              "value": "1900-01-01-00.00.00"
+            },
+            {
+              "key": "productId",
+              "value": "99999"
+            },
+            {
+              "key": "brandId",
+              "value": "99"
+            }
+          ]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404 or appropriate error\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([404, 400]);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ]
+}
