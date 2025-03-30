@@ -1,11 +1,11 @@
 package com.vps.inditex.infrastructure.mapper;
 
-import com.vps.inditex.application.dto.PriceDTO;
-import com.vps.inditex.infrastructure.response.PriceResponse;
+import com.vps.inditex.domain.model.Price;
+import com.vps.inditex.domain.dto.PriceDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface PriceControllerMapper {
 
-    PriceResponse toResponse(PriceDTO dto);
+    PriceDTO toResponse(Price dto);
 }

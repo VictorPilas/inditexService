@@ -44,10 +44,9 @@
               "pm.test(\"Status code is 200\", function () {",
               "    pm.response.to.have.status(200);",
               "});",
-              "pm.test(\"Response has price list\", function () {",
+              "pm.test(\"Response has priceDto\", function () {",
               "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.length).to.be.above(0);",
-              "    pm.expect(jsonData[0]).to.have.property('price');",
+              "    pm.expect(jsonData).to.have.property('price');",
               "});"
             ],
             "type": "text/javascript"

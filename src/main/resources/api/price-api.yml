@@ -1,0 +1,51 @@
+openapi: 3.0.1
+info:
+  title: Price API
+  description: API para la gestión de precios
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/prices:
+    get:
+      summary: Obtener precio por fecha, producto y marca
+      parameters:
+        - name: requestDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: productId
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: brandId
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Precio encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Price"
+        "404":
+          description: Precio no encontrado
+components:
+  schemas:
+    Price:
+      type: object
+      properties:
+        id:
+          type: integer
+        productId:
+          type: integer
+        brandId:
+          type: integer
+        price:
+          type: number
+          format: float

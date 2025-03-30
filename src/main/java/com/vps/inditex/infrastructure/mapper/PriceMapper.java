@@ -1,7 +1,7 @@
-package com.vps.inditex.application.mapper;
+package com.vps.inditex.infrastructure.mapper;
 
-import com.vps.inditex.application.dto.PriceDTO;
 import com.vps.inditex.domain.model.Price;
+import com.vps.inditex.domain.entity.PriceEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -9,29 +9,27 @@ import org.mapstruct.Named;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
-@Mapper(componentModel = "spring",
-        uses = {BrandMapper.class})
+@Mapper(componentModel = "spring")
 public interface PriceMapper {
 
-    @Mapping(source = "brand", target = "brandId")
     @Mapping(source = "startDate", target = "startDate", qualifiedByName = "timestampToString")
     @Mapping(source = "endDate", target = "endDate", qualifiedByName = "timestampToString")
-    PriceDTO toDTO(Price entity);
+    Price toDTO(PriceEntity entity);
 
-    default Integer toPriceDTO(Price price) {
-        if (price == null) {
+    default Integer toPriceDTO(PriceEntity priceEntity) {
+        if (priceEntity == null) {
             return null;
         }
-        return price.getId();
+        return priceEntity.getId();
     }
 
-    default Price toPriceEntity(Integer priceId) {
+    default PriceEntity toPriceEntity(Integer priceId) {
         if (priceId == null) {
             return null;
         }
-        Price price = new Price();
-        price.setId(priceId);
-        return price;
+        PriceEntity priceEntity = new PriceEntity();
+        priceEntity.setId(priceId);
+        return priceEntity;
     }
 
     @Named("timestampToString")

@@ -1,4 +1,4 @@
-package com.vps.inditex.infrastructure.response;
+package com.vps.inditex.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PriceResponse {
+public class PriceDTO {
 
     private Long productId;
     private Integer brandId;

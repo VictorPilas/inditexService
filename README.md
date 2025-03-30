@@ -116,9 +116,7 @@ GET http://localhost:8080/prices?date=2020-06-16-21.00.00&productId=35455&brandI
 
 ### 1. **Importar colección Postman**
 
-Descarga la colección actualizada:
-
-[Descargar Inditex Postman Collection](sandbox:/mnt/data/inditex_postman_collection_updated.json)
+inditex_postman_collection.json 
 
 Importa en Postman para ejecutar dos escenarios:
 
